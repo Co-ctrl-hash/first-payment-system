@@ -92,9 +92,10 @@ Request → JWT Filter → Validate Token → Set Authentication → Controller 
 
 **Example**: `HD-1-1771573649709`
 
-### Success Rate Distribution
-- ✅ **75% SUCCESS** - Payment processed successfully
-- ❌ **25% FAILED** - Payment failed (insufficient funds/technical error)
+### Business Rules
+- ✅ **75% SUCCESS** - Payment processed successfully (for amounts ≤ 100,000)
+- ❌ **25% FAILED** - Random failure (insufficient funds/technical error)
+- 🚫 **Auto FAILED** - Payments over 100,000 automatically rejected (exceeds limit)
 
 ### Payment Statuses
 1. **INITIATED** - Payment request received

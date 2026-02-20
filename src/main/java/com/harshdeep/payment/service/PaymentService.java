@@ -59,8 +59,14 @@ public class PaymentService {
         payment.setStatus(PaymentStatus.INITIATED);
         log.info("Transaction initiated with ID: {}", transactionId);
 
+        // Business rule: Amounts over 100,000 automatically fail
+        if (payment.getAmount() > 100000) {
+            payment.setStatus(PaymentStatus.FAILED);
+            payment.setRemarks("Payment amount exceeds maximum allowed limit");
+            log.warn("Payment {} failed - Amount exceeds limit: {}", transactionId, payment.getAmount());
+        }
         // Determine payment status: 75% SUCCESS, 25% FAILED
-        if (random.nextDouble() < SUCCESS_RATE) {
+        else if (random.nextDouble() < SUCCESS_RATE) {
             payment.setStatus(PaymentStatus.SUCCESS);
             payment.setRemarks("Payment processed successfully");
             log.info("Payment {} completed successfully", transactionId);
