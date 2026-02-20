@@ -39,7 +39,6 @@ Secure Payment Service is a RESTful API backend system designed to handle paymen
 - 📝 Global exception handling
 
 ### Code Quality
-- 📖 Comprehensive JavaDoc documentation
 - 🏗️ Constructor-based dependency injection
 - 📊 SLF4J logging throughout
 - 🎯 Layered architecture (Controller → Service → Repository)

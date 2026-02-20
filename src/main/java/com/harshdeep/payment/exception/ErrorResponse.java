@@ -2,12 +2,6 @@ package com.harshdeep.payment.exception;
 
 import lombok.*;
 
-/**
- * DTO for error response structure.
- * 
- * @author Harsh Deep
- * @version 1.0.0
- */
 @Getter
 @Setter
 @AllArgsConstructor

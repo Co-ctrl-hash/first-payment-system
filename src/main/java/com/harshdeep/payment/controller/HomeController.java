@@ -111,11 +111,6 @@ public class HomeController {
                 """;
     }
 
-    /**
-     * Get API information as JSON.
-     * 
-     * @return API details map
-     */
     @GetMapping("/api")
     public Map<String, Object> apiInfo() {
         Map<String, Object> response = new HashMap<>();
