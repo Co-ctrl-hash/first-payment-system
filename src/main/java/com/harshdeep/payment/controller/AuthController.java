@@ -6,13 +6,6 @@ import com.harshdeep.payment.security.JwtUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * REST controller for handling user authentication.
- * Provides endpoints for user registration and login with JWT token generation.
- * 
- * @author Harsh Deep
- * @version 1.0.0
- */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -21,13 +14,6 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder encoder;
 
-    /**
-     * Constructor injection for dependencies.
-     * 
-     * @param userRepository the user repository
-     * @param jwtUtil JWT utility for token generation
-     * @param encoder BCrypt password encoder
-     */
     public AuthController(UserRepository userRepository,
                           JwtUtil jwtUtil,
                           BCryptPasswordEncoder encoder) {
@@ -36,25 +22,13 @@ public class AuthController {
         this.encoder = encoder;
     }
 
-    /**
-     * Register a new user with encrypted password.
-     * 
-     * @param user the user to register
-     * @return the registered user
-     */
     @PostMapping("/register")
     public User register(@RequestBody User user) {
+        // Encrypt password using BCrypt before saving
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    /**
-     * Authenticate user and generate JWT token.
-     * 
-     * @param user the user credentials
-     * @return JWT token for authenticated user
-     * @throws RuntimeException if user not found or credentials invalid
-     */
     @PostMapping("/login")
     public String login(@RequestBody User user) {
         User dbUser = userRepository.findByUsername(user.getUsername())
