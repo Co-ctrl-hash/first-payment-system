@@ -5,12 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-/**
- * Payment entity representing a payment transaction in the system.
- * 
- * @author Harsh Deep
- * @version 1.0.0
- */
 @Entity
 @Getter
 @Setter

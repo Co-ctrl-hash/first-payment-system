@@ -7,20 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Home controller providing API information and documentation.
- * 
- * @author Harsh Deep
- * @version 1.0.0
- */
 @RestController
 public class HomeController {
 
-    /**
-     * Display HTML homepage with API documentation.
-     * 
-     * @return HTML page
-     */
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     public String homeHtml() {
         return """

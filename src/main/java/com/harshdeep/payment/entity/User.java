@@ -4,12 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-/**
- * User entity representing a system user.
- * 
- * @author Harsh Deep
- * @version 1.0.0
- */
 @Entity
 @Table(name = "users")
 @Getter

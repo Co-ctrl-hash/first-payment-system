@@ -10,37 +10,15 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Collections;
 
-/**
- * JWT authentication filter to validate and process JWT tokens.
- * Executes once per request before the authentication filter.
- * 
- * @author Harsh Deep
- * @version 1.0.0
- */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-    /**
-     * Constructor injection for JwtUtil.
-     * 
-     * @param jwtUtil JWT utility
-     */
     public JwtFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
-    /**
-     * Filter to extract and validate JWT token from Authorization header.
-     * Sets authentication in SecurityContext if token is valid.
-     * 
-     * @param request the HTTP request
-     * @param response the HTTP response
-     * @param filterChain the filter chain
-     * @throws ServletException if servlet error occurs
-     * @throws IOException if I/O error occurs
-     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
