@@ -1,345 +1,191 @@
-# 🔐 Secure Payment Service
+# Payment Transaction System
 
-A production-ready payment transaction management system built with Spring Boot 3, featuring JWT authentication, BCrypt password encryption, and comprehensive security features.
+A simple payment management REST API built with Spring Boot to learn JWT authentication and Spring Security.
 
-> **Note**: This is a personal learning project developed to demonstrate secure API development practices and modern backend architecture.
+## Overview
 
-## 📋 Table of Contents
+This is a learning project I created to understand how authentication and security work in Spring Boot applications. It's a basic payment system where users can register, login, and manage payment transactions.
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Payment Lifecycle](#payment-lifecycle)
-- [Security Features](#security-features)
-- [Getting Started](#getting-started)
-- [API Documentation](#api-documentation)
-- [Project Structure](#project-structure)
-- [Author](#author)
+I built this to learn:
+- How JWT tokens work for authentication
+- How to encrypt passwords with BCrypt
+- How to protect API endpoints
+- How Spring Security filters work
+- Basic REST API design
 
-## 🎯 Overview
+**Note**: This is not a real payment system. It uses an in-memory database and simulates payment processing for learning purposes.
 
-Secure Payment Service is a RESTful API backend system designed to handle payment transactions with enterprise-level security. The system implements JWT-based authentication, BCrypt password hashing, and follows best practices for secure API development.
+## Features
 
-## ✨ Features
+- User registration and login
+- JWT token authentication
+- Create and manage payments
+- Refund payments
+- Check payment status
+- Protected API endpoints
 
-### Core Features
-- ✅ User registration and authentication
-- ✅ JWT token-based authorization
-- ✅ Payment transaction management
-- ✅ Payment status tracking (INITIATED, SUCCESS, FAILED, REFUNDED)
-- ✅ Payment refund processing
-- ✅ User-specific payment retrieval
+## Tech Stack
 
-### Security Features
-- 🔐 BCrypt password encryption
-- 🔑 JWT token authentication
-- 🛡️ Stateless session management
-- 🚫 Protected API endpoints
-- 📝 Global exception handling
+- **Spring Boot 3.2.0** - Main framework
+- **Java 17** - Programming language
+- **Spring Security** - Security and authentication
+- **JWT** - Token-based auth
+- **H2 Database** - In-memory database (data resets on restart)
+- **Spring Data JPA** - Database operations
+- **Maven** - Build tool
+- **Lombok** - Reduces boilerplate code
 
-### Code Quality
-- 🏗️ Constructor-based dependency injection
-- 📊 SLF4J logging throughout
-- 🎯 Layered architecture (Controller → Service → Repository)
-- ✨ Clean code principles
+## Security Features
 
-## 🛠️ Tech Stack
+### JWT Authentication
+The API uses JWT tokens for authentication. When you login, you get a token that you need to include in the header for accessing protected endpoints.
 
-| Component | Technology |
-|-----------|-----------|
-| **Framework** | Spring Boot 3.2.0 |
-| **Language** | Java 17 |
-| **Security** | Spring Security + JWT |
-| **Database** | H2 (In-Memory) |
-| **ORM** | Spring Data JPA / Hibernate |
-| **Build Tool** | Maven |
-| **Password Encryption** | BCrypt |
-| **Validation** | Jakarta Validation |
-| **Utilities** | Lombok |
+- Token expires after 24 hours
+- Stateless authentication (no sessions stored on server)
 
-## 🏛️ Architecture
+### Password Encryption
+User passwords are encrypted using BCrypt before saving to database. This means:
+- Passwords are never stored in plain text
+- Each password gets a unique salt
+- Same password produces different hash each time
 
-```
-┌─────────────────┐
-│   Controllers   │  ← REST API Endpoints
-└────────┬────────┘
-         │
-┌────────▼────────┐
-│    Services     │  ← Business Logic & Logging
-└────────┬────────┘
-         │
-┌────────▼────────┐
-│  Repositories   │  ← Data Access Layer
-└────────┬────────┘
-         │
-┌────────▼────────┐
-│   H2 Database   │  ← In-Memory Storage
-└─────────────────┘
-```
+### Endpoint Protection
+- Public endpoints: `/auth/register`, `/auth/login`, `/h2-console`
+- Protected endpoints: Everything under `/payments` requires a valid JWT token
 
-### Security Flow
+## How to Run
 
-```
-Request → JWT Filter → Validate Token → Set Authentication → Controller → Service → Repository
-```
-
-## 💳 Payment Lifecycle
-
-### Transaction ID Format
-`HD-{userId}-{timestamp}`
-
-**Example**: `HD-1-1771573649709`
-
-### Business Rules
-- ✅ **75% SUCCESS** - Payment processed successfully (for amounts ≤ 100,000)
-- ❌ **25% FAILED** - Random failure (insufficient funds/technical error)
-- 🚫 **Auto FAILED** - Payments over 100,000 automatically rejected (exceeds limit)
-
-### Payment Statuses
-1. **INITIATED** - Payment request received
-2. **SUCCESS** - Payment completed successfully
-3. **FAILED** - Payment processing failed
-4. **REFUNDED** - Successful payment refunded
-
-## 🔒 Security Features
-
-### 1. Password Security
-- Passwords encrypted using **BCrypt** algorithm
-- Salt automatically generated per password
-- Rainbow table attack prevention
-
-### 2. JWT Authentication
-- Token-based stateless authentication
-- 24-hour token validity
-- Automatic token validation on each request
-
-### 3. Endpoint Protection
-- **Public Endpoints**: `/auth/**`, `/h2-console/**`
-- **Protected Endpoints**: All `/payments/**` APIs require valid JWT token
-
-### 4. Session Management
-- Stateless architecture (no server-side sessions)
-- CSRF protection disabled (not needed for JWT)
-
-## 🚀 Getting Started
-
-### Prerequisites
+### Requirements
 - Java 17 or higher
-- Maven 3.6+
+- Maven
 
-### Installation & Running
+### Steps
 
-1. **Clone the repository**
+1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/Co-ctrl-hash/first-payment-system.git
 cd first-payment-system
 ```
 
-2. **Build the project**
+2. Build the project
 ```bash
 mvn clean install
 ```
 
-3. **Run the application**
+3. Run the application
 ```bash
 mvn spring-boot:run
 ```
 
-4. **Access the application**
-- API Base URL: `http://localhost:8081`
-- Web Interface: `http://localhost:8081/`
-- H2 Console: `http://localhost:8081/h2-console`
+4. The server starts on `http://localhost:8081`
 
-### H2 Database Configuration
-- **JDBC URL**: `jdbc:h2:mem:payment_db`
-- **Username**: `sa`
-- **Password**: *(leave empty)*
+### Database Console
+You can access the H2 database console at `http://localhost:8081/h2-console`
 
-## 📚 API Documentation
+Connection details:
+- JDBC URL: `jdbc:h2:mem:payment_db`
+- Username: `sa`
+- Password: (leave empty)
 
-### Authentication APIs (Public)
+## API Endpoints
 
-#### 1. Register User
-```http
+### Register a new user
+```bash
 POST /auth/register
 Content-Type: application/json
 
 {
-  "username": "john_doe",
-  "password": "secure_password"
+  "username": "testuser",
+  "password": "testpass"
 }
 ```
 
-**Response**: User object with encrypted password
-
-#### 2. Login
-```http
+### Login
+```bash
 POST /auth/login
 Content-Type: application/json
 
 {
-  "username": "john_doe",
-  "password": "secure_password"
+  "username": "testuser",
+  "password": "testpass"
 }
 ```
+Returns a JWT token. Copy this token for subsequent requests.
 
-**Response**: JWT token (use in Authorization header for protected endpoints)
-
-### Payment APIs (Protected - Requires JWT Token)
-
-All payment endpoints require `Authorization: Bearer <token>` header
-
-#### 3. Create Payment
-```http
+### Create a payment (requires JWT token)
+```bash
 POST /payments
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer YOUR_JWT_TOKEN
 Content-Type: application/json
 
 {
   "userId": 1,
-  "amount": 100.50,
+  "amount": 500,
   "currency": "USD",
   "paymentMethod": "CREDIT_CARD"
 }
 ```
 
-**Response**: Payment object with transaction ID and status
-
-#### 4. Get All Payments
-```http
+### Get all payments
+```bash
 GET /payments
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
-#### 5. Get Payment by ID
-```http
+### Get payment by ID
+```bash
 GET /payments/{id}
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
-#### 6. Get Payments by User
-```http
-GET /payments/user/{userId}
-Authorization: Bearer <your-jwt-token>
-```
-
-#### 7. Refund Payment
-```http
+### Refund a payment
+```bash
 POST /payments/{id}/refund
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
-**Note**: Only payments with SUCCESS status can be refunded
+## How Payment Processing Works
 
-## 📁 Project Structure
+The system simulates payment processing:
+- Payments have a 75% chance of success
+- Payments over 100,000 automatically fail (business rule I added)
+- Each payment gets a unique transaction ID like `HD-1-1771573649709`
 
-```
-src/main/java/com/harshdeep/payment/
-├── config/
-│   ├── SecurityBeans.java        # BCrypt encoder bean
-│   └── SecurityConfig.java       # JWT security configuration
-├── controller/
-│   ├── AuthController.java       # Authentication endpoints
-│   ├── HomeController.java       # Documentation homepage
-│   └── PaymentController.java    # Payment transaction endpoints
-├── entity/
-│   ├── Payment.java             # Payment entity
-│   ├── PaymentStatus.java       # Payment status enum
-│   └── User.java                # User entity
-├── exception/
-│   ├── ErrorResponse.java       # Error response DTO
-│   ├── GlobalExceptionHandler.java
-│   └── ResourceNotFoundException.java
-├── repository/
-│   ├── PaymentRepository.java   # Payment data access
-│   └── UserRepository.java      # User data access
-├── security/
-│   ├── JwtFilter.java          # JWT authentication filter
-│   └── JwtUtil.java            # JWT token utility
-├── service/
-│   └── PaymentService.java     # Payment business logic
-└── PaymentApplication.java     # Main application class
-```
+Payment can have these statuses:
+- `INITIATED` - Payment just created
+- `SUCCESS` - Payment went through
+- `FAILED` - Payment failed
+- `REFUNDED` - Payment was refunded
 
-## 🧪 Testing Flow
+## What I Learned
 
-### Step-by-Step Test
+- Setting up Spring Security with JWT
+- Creating custom authentication filters
+- Encrypting passwords properly
+- Designing REST APIs
+- Working with Spring Data JPA
+- Exception handling in Spring Boot
+- Using constructor injection instead of @Autowired
+- Logging with SLF4J
 
-1. **Register a User**
-```bash
-curl -X POST http://localhost:8081/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"username":"testuser","password":"testpass"}'
-```
+## Future Improvements
 
-2. **Login and Get Token**
-```bash
-curl -X POST http://localhost:8081/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"testuser","password":"testpass"}'
-```
+Things I want to add when I learn more:
+- Add proper unit tests
+- Switch to a real database (PostgreSQL)
+- Add role-based access (admin vs user)
+- Add pagination for payment lists
+- Better error messages
+- API documentation with Swagger
 
-3. **Create Payment (with token)**
-```bash
-curl -X POST http://localhost:8081/payments \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"userId":1,"amount":150.75,"currency":"USD","paymentMethod":"CREDIT_CARD"}'
-```
-
-4. **Get User Payments**
-```bash
-curl -X GET http://localhost:8081/payments/user/1 \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
-```
-
-## 🎓 Learning Outcomes
-
-This project demonstrates:
-- ✅ RESTful API design principles
-- ✅ JWT authentication implementation
-- ✅ Spring Security configuration
-- ✅ Password encryption best practices
-- ✅ Layered architecture
-- ✅ Dependency injection patterns
-- ✅ Exception handling strategies
-- ✅ Logging best practices
-- ✅ Code documentation with JavaDoc
-
-## 🔄 Future Enhancements
-
-- [ ] Add role-based authorization (ADMIN, USER)
-- [ ] Implement payment gateway integration
-- [ ] Add transaction history and audit logs
-- [ ] Implement rate limiting
-- [ ] Add API versioning
-- [ ] Integrate with real database (PostgreSQL/MySQL)
-- [ ] Add unit and integration tests
-- [ ] Implement caching with Redis
-- [ ] Add API documentation with Swagger/OpenAPI
-
-## 👨‍💻 Author
+## Author
 
 **Harsh Deep**
 
-This project was developed as a personal learning initiative to understand and implement secure backend development practices using modern Java and Spring Boot technologies.
+Built this project to learn Spring Boot security and REST API development.
 
-## 📄 License
+## Notes
 
-This is a personal learning project created for educational purposes.
-
----
-
-**Note**: This project uses an in-memory H2 database. Data will be lost when the application stops. For production use, integrate with a persistent database like PostgreSQL or MySQL.
-
-## 🙏 Acknowledgments
-
-- Spring Boot Documentation
-- Spring Security Documentation
-- JWT.io for JWT standards
-- Baeldung tutorials for Spring Security patterns
-
----
-
-Made with ❤️ for learning and skill development
+- The database is in-memory, so all data is lost when you stop the application
+- This is a learning project, not meant for production use
+- Payment processing is simulated, not real
