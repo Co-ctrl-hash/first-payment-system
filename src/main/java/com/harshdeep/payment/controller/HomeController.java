@@ -1,5 +1,6 @@
 package com.harshdeep.payment.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,11 +8,34 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Home controller providing information about the Secure Payment Service API.
+ * 
+ * Offers HTML-based documentation and JSON API information endpoints
+ * for developers and system administrators.
+ */
+@Slf4j
 @RestController
 public class HomeController {
 
+    /**
+     * Serves a comprehensive HTML home page with API documentation.
+     * 
+     * Returns a styled HTML page containing:
+     * - Service description and status
+     * - List of all available API endpoints
+     * - Security features overview
+     * - Database connection information
+     * - Quick test examples using cURL
+     * 
+     * This endpoint is public (no authentication required).
+     * 
+     * @return HTML page as string with application information
+     */
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     public String homeHtml() {
+        log.debug("Serving home HTML page");
+        
         return """
                 <!DOCTYPE html>
                 <html>
@@ -111,8 +135,24 @@ public class HomeController {
                 """;
     }
 
+    /**
+     * Provides API information in JSON format.
+     * 
+     * Returns metadata about the application including:
+     * - Application name and version
+     * - All available endpoints grouped by category
+     * - Security mechanisms employed
+     * - Database connection configuration
+     * 
+     * This endpoint is public (no authentication required).
+     * Useful for programmatic discovery of API capabilities.
+     * 
+     * @return Map containing application info and endpoints
+     */
     @GetMapping("/api")
     public Map<String, Object> apiInfo() {
+        log.debug("Serving API information endpoint");
+        
         Map<String, Object> response = new HashMap<>();
         response.put("application", "Secure Payment Service");
         response.put("version", "1.0.0");
